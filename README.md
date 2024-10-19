@@ -75,7 +75,7 @@ Content-Type: application/json
 {
   "clientName": "John Doe",
   "service": "Haircut",
-  "dateTime": "2023-06-01T10:00:00Z"
+  "dateTime": "2024-11-01T10:00:00Z"
 }
 ```
 
@@ -87,8 +87,8 @@ Content-Type: application/json
 {
   "clientName": "Jane Smith",
   "service": "Massage",
-  "startDate": "2023-06-01T14:00:00Z",
-  "endDate": "2023-12-31T14:00:00Z",
+  "startDate": "2024-11-01T14:00:00Z",
+  "endDate": "2024-12-31T14:00:00Z",
   "recurrenceType": "Weekly",
   "recurrenceInterval": 1
 }
@@ -98,4 +98,4 @@ Content-Type: application/json
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
