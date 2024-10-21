@@ -1,13 +1,14 @@
 using AppointmentAPI.DTO;
 using AppointmentAPI.Model;
-using AppointmentAPI.Repository;
+using AppointmentAPI.Repository.AppointmentRepo;
+using AppointmentAPI.Repository.AppointmentRepository;
+using AppointmentAPI.Repository.RecurringAppointmentRepo;
 
-namespace AppointmentAPI.Services
+namespace AppointmentAPI.Services.AppointmentService
 {
     public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _repository;
-        private readonly INotificationService _notificationService;
         private readonly IRecurringAppointmentRepository _recurringAppointmentRepository;
 
         public AppointmentService(
@@ -28,7 +29,7 @@ namespace AppointmentAPI.Services
             var appointment = await _repository.GetByIdAsync(id);
             if (appointment == null)
             {
-                throw new NotFoundException("Appointment not found");
+                throw new Exception("Appointment not found");
             }
             return appointment;
         }
@@ -118,17 +119,17 @@ namespace AppointmentAPI.Services
             return appointments;
         }
 
-        public async Task<List<Appointment>> GetUpcomingRecurringAppointmentsAsync(string recurringAppointmentId)
+        public async Task<List<Appointment>> GetUpcomingRecurringAppointmentsAsync(string recurringAppointmentId, int count)
         {
             var recurringAppointment = await _recurringAppointmentRepository.GetByIdAsync(recurringAppointmentId);
             if (recurringAppointment == null)
             {
-                throw new NotFoundException("Recurring appointment not found");
+                throw new Exception("Recurring appointment not found");
             }
 
             var appointments = await _repository.GetUpcomingByRecurringIdAsync(recurringAppointmentId);
 
-            while (appointments.Count < 5 && (recurringAppointment.EndDate == null || appointments.Last().DateTime <= recurringAppointment.EndDate))
+            while (appointments.Count < count && (recurringAppointment.EndDate == null || appointments.Last().DateTime <= recurringAppointment.EndDate))
             {
                 var lastAppointment = appointments.Last();
                 var nextAppointment = new Appointment

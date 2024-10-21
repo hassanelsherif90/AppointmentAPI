@@ -1,6 +1,6 @@
 ﻿using AppointmentAPI.Model;
 
-namespace AppointmentAPI.Repository
+namespace AppointmentAPI.Repository.AppointmentRepo
 {
     public interface IAppointmentRepository
     {

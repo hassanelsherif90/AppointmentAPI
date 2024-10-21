@@ -1,6 +1,6 @@
 using AppointmentAPI.DTO;
 using AppointmentAPI.Model;
-using AppointmentAPI.Services;
+using AppointmentAPI.Services.AppointmentService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentAPI.Controllers
@@ -13,25 +13,49 @@ namespace AppointmentAPI.Controllers
 
         public AppointmentsController(IAppointmentService service)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetAllAppointments()
+        public async Task<ActionResult<IEnumerable<AppointmentDTO>>> GetAllAppointments()
         {
+            var appointmentDtoList =  new List<AppointmentDTO>();   
             var appointments = await _service.GetAllAppointments();
-            return Ok(appointments);
+
+            foreach (var appointment in appointments)
+            {
+                var appointmentDto = new AppointmentDTO
+                {
+                    ID=appointment.Id,
+                    ClientName = appointment.ClientName,
+                    Service = appointment.Service,
+                    DateTime = appointment.DateTime,
+                  };
+
+                appointmentDtoList.Add(appointmentDto); 
+            }
+
+            return Ok(appointmentDtoList);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Appointment>> GetAppointment(string id)
+        public async Task<ActionResult<AppointmentDTO>> GetAppointment(string id)
         {
             try
             {
                 var appointment = await _service.GetAppointmentById(id);
-                return Ok(appointment);
+
+                var appointmentDTO = new AppointmentDTO
+                {
+                    ID = appointment.Id,
+                    DateTime = DateTime.Now,
+                    Service = appointment.Service,
+                    ClientName=appointment.ClientName,  
+                };
+
+                return Ok(appointmentDTO);
             }
-            catch (NotFoundException)
+            catch (Exception ex)
             {
                 return NotFound();
             }
@@ -78,18 +102,11 @@ namespace AppointmentAPI.Controllers
                 await _service.UpdateAppointment(id, existingAppointment);
                 return NoContent();
             }
-            catch (NotFoundException)
+            catch (Exception ex)
             {
                 return NotFound();
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(ex.Message);
-            }
+           
         }
 
         [HttpDelete("{id}")]
@@ -100,7 +117,7 @@ namespace AppointmentAPI.Controllers
                 await _service.DeleteAppointment(id);
                 return NoContent();
             }
-            catch (NotFoundException)
+            catch (Exception ex)
             {
                 return NotFound();
             }
@@ -109,33 +126,27 @@ namespace AppointmentAPI.Controllers
         [HttpPost("recurring")]
         public async Task<ActionResult<IEnumerable<Appointment>>> CreateRecurringAppointment(RecurringAppointmentDto dto)
         {
-            try
-            {
-                var appointments = await _service.CreateRecurringAppointmentsAsync(dto);
-                return Ok(appointments);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(ex.Message);
-            }
+
+            var appointments = await _service.CreateRecurringAppointmentsAsync(dto);
+
+            return Ok(appointments);    
+
         }
 
         [HttpGet("recurring/{id}")]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetUpcomingRecurringAppointments(string id)
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetUpcomingRecurringAppointments(string id, int count)
         {
             try
             {
-                var appointments = await _service.GetUpcomingRecurringAppointmentsAsync(id);
+                var appointments = await _service.GetUpcomingRecurringAppointmentsAsync(id, count);
                 return Ok(appointments);
             }
-            catch (NotFoundException)
+            catch (Exception ex)
             {
                 return NotFound();
             }
         }
+    
+    
     }
 }

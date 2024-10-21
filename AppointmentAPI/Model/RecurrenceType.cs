@@ -4,7 +4,7 @@ namespace AppointmentAPI.Model
 {
     public enum RecurrenceType
     {
-        Daily,
+        Daily = 1,
         Weekly,
         Monthly,
         Yearly

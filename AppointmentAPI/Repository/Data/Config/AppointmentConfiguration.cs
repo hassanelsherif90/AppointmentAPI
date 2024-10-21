@@ -28,9 +28,12 @@ namespace AppointmentAPI.Repository.Data.Config
             .IsRequired();
 
             builder.HasOne(x => x.RecurringAppointment)
-                .WithMany(x => x.Appointments)
-                .HasForeignKey(x => x.RecurringAppointmentId)
-                .IsRequired();
+            .WithMany(x => x.Appointments)
+            .HasForeignKey(x => x.RecurringAppointmentId)
+            .IsRequired();
+
+
+
 
             builder.ToTable("Appointment");
         }

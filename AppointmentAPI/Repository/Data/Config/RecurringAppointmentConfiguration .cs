@@ -39,6 +39,7 @@ namespace AppointmentAPI.Repository.Data.Config
                 .IsRequired(false);
 
 
+         
 
             builder.ToTable("RecurringAppointment");
         }

@@ -2,7 +2,7 @@ using AppointmentAPI.Model;
 using AppointmentAPI.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentAPI.Repository
+namespace AppointmentAPI.Repository.AppointmentRepository
 {
     public class AppointmentRepository : IAppointmentRepository
     {

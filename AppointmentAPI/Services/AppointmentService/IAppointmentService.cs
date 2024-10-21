@@ -1,7 +1,7 @@
 ﻿using AppointmentAPI.DTO;
 using AppointmentAPI.Model;
 
-namespace AppointmentAPI.Services
+namespace AppointmentAPI.Services.AppointmentService
 {
     public interface IAppointmentService
     {
@@ -18,6 +18,6 @@ namespace AppointmentAPI.Services
 
         Task<List<Appointment>> CreateRecurringAppointmentsAsync(RecurringAppointmentDto dto);
 
-        Task<List<Appointment>> GetUpcomingRecurringAppointmentsAsync(string recurringAppointmentId);
+        Task<List<Appointment>> GetUpcomingRecurringAppointmentsAsync(string recurringAppointmentId, int count);
     }
 }

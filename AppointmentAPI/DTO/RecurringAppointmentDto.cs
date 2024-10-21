@@ -6,7 +6,7 @@ namespace AppointmentAPI.DTO
     {
         public string ClientName { get; set; }
         public string Service { get; set; }
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } 
         public RecurrenceType RecurrenceType { get; set; }
         public int RecurrenceInterval { get; set; }
         public DateTime? EndDate { get; set; }
