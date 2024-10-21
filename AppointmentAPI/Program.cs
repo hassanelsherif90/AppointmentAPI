@@ -20,7 +20,6 @@ builder.Services.AddDbContext<AppointmentDbContext>(options =>
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IRecurringAppointmentRepository, RecurringAppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
-builder.Services.AddScoped<INotificationService, EmailService>();
 
 builder.Services.AddScoped<AppointmentService>();
 

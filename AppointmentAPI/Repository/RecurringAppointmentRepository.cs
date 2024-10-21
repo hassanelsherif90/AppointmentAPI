@@ -10,7 +10,7 @@ namespace AppointmentAPI.Repository
 
         public RecurringAppointmentRepository(AppointmentDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
         }
 
         public async Task<RecurringAppointment> GetByIdAsync(string id)

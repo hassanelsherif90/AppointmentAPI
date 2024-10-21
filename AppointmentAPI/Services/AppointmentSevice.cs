@@ -12,12 +12,10 @@ namespace AppointmentAPI.Services
 
         public AppointmentService(
             IAppointmentRepository repository,
-            INotificationService notificationService,
             IRecurringAppointmentRepository recurringAppointmentRepository)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
-            _recurringAppointmentRepository = recurringAppointmentRepository ?? throw new ArgumentNullException(nameof(recurringAppointmentRepository));
+            _repository = repository;
+            _recurringAppointmentRepository = recurringAppointmentRepository;
         }
 
         public async Task<List<Appointment>> GetAllAppointments()
@@ -42,10 +40,6 @@ namespace AppointmentAPI.Services
 
             var newAppointment = await _repository.AddAsync(appointment);
 
-            //await _notificationService.SendEmailAsync(
-            //    appointment.Email ?? "",
-            //    "Appointment Confirmation",
-            //    $"Your appointment has been confirmed for {appointment.DateTime}");
 
             return newAppointment;
         }
@@ -55,6 +49,7 @@ namespace AppointmentAPI.Services
             var existingAppointment = await GetAppointmentById(id);
 
             ValidateAppointment(appointment);
+
             if (existingAppointment.DateTime != appointment.DateTime)
             {
                 await EnsureTimeSlotAvailable(appointment.DateTime);
@@ -65,7 +60,6 @@ namespace AppointmentAPI.Services
 
         public async Task DeleteAppointment(string id)
         {
-            await GetAppointmentById(id);
             await _repository.DeleteAsync(id);
         }
 
@@ -153,6 +147,7 @@ namespace AppointmentAPI.Services
 
         private void ValidateAppointment(Appointment appointment)
         {
+
             if (appointment == null)
             {
                 throw new ArgumentNullException(nameof(appointment));
@@ -193,7 +188,7 @@ namespace AppointmentAPI.Services
                 RecurrenceType.Weekly => current.AddDays(7 * interval),
                 RecurrenceType.Monthly => current.AddMonths(interval),
                 RecurrenceType.Yearly => current.AddYears(interval),
-                _ => throw new ArgumentOutOfRangeException(nameof(type))
+                _ => current.AddYears(interval)
             };
         }
     }

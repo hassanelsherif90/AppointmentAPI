@@ -10,7 +10,7 @@ namespace AppointmentAPI.Repository
 
         public AppointmentRepository(AppointmentDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
         }
 
         public async Task<List<Appointment>> GetAllAsync()
@@ -41,7 +41,7 @@ namespace AppointmentAPI.Repository
 
         public async Task DeleteAsync(string id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
+            var appointment = await GetByIdAsync(id);
             if (appointment != null)
             {
                 _context.Appointments.Remove(appointment);
@@ -51,6 +51,7 @@ namespace AppointmentAPI.Repository
 
         public async Task<List<Appointment>> GetUpcomingByRecurringIdAsync(string recurringAppointmentId)
         {
+            // ReturnAppoinments In the future Comming
             return await _context.Appointments
                 .AsNoTracking()
                 .Where(a => a.RecurringAppointmentId == recurringAppointmentId && a.DateTime > DateTime.UtcNow)

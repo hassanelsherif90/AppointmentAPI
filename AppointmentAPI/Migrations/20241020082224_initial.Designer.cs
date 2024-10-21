@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppointmentAPI.Migrations
 {
     [DbContext(typeof(AppointmentDbContext))]
-    [Migration("20241017122835_inatial-Add-Table-Recurring")]
-    partial class inatialAddTableRecurring
+    [Migration("20241020082224_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,7 @@ namespace AppointmentAPI.Migrations
 
                     b.Property<string>("ClientName")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("NVARCHAR")
                         .HasColumnName("ClientName");
 
@@ -45,6 +46,7 @@ namespace AppointmentAPI.Migrations
 
                     b.Property<string>("Service")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("NVARCHAR")
                         .HasColumnName("Service");
 
