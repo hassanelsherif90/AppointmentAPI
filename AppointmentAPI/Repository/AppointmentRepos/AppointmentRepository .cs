@@ -1,4 +1,5 @@
 using AppointmentAPI.Model;
+using AppointmentAPI.Repository.AppointmentRepo;
 using AppointmentAPI.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,5 +59,12 @@ namespace AppointmentAPI.Repository.AppointmentRepository
                 .OrderBy(a => a.DateTime)
                 .ToListAsync();
         }
+
+
+        public async Task<IEnumerable<Appointment>> AllRecurringAppointment()
+        {
+            return _context.Appointments.Include(x=>x.RecurringAppointment);
+        }
+       
     }
 }

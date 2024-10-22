@@ -10,5 +10,10 @@ namespace AppointmentAPI.Repository.AppointmentRepo
         Task UpdateAsync(Appointment appointment);
         Task DeleteAsync(string id);
         Task<List<Appointment>> GetUpcomingByRecurringIdAsync(string recurringAppointmentId);
+
+        Task<IEnumerable<Appointment>> AllRecurringAppointment();
+
+
+
     }
 }

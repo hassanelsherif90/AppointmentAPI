@@ -1,6 +1,8 @@
+using AppointmentAPI.Repository.AppointmentRepo;
 using AppointmentAPI.Repository.AppointmentRepository;
 using AppointmentAPI.Repository.Data;
 using AppointmentAPI.Repository.RecurringAppointmentRepo;
+using AppointmentAPI.Services.AppointmentService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -61,7 +61,7 @@ namespace AppointmentAPI.Controllers
             }
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult<Appointment>> CreateAppointment(AppointmentDTO appointmentDTO)
         {
             try
@@ -72,10 +72,11 @@ namespace AppointmentAPI.Controllers
                     Service = appointmentDTO.Service,
                     ClientName = appointmentDTO.ClientName,
                     DateTime = appointmentDTO.DateTime,
-                    RecurringAppointmentId = null  // Set this only if it's part of a recurring appointment
+                    RecurringAppointmentId = null
                 };
 
                 var createdAppointment = await _service.CreateAppointment(appointment);
+
                 return CreatedAtAction(nameof(GetAppointment), new { id = createdAppointment.Id }, createdAppointment);
             }
             catch (ArgumentException ex)
@@ -86,7 +87,7 @@ namespace AppointmentAPI.Controllers
             {
                 return Conflict(ex.Message);
             }
-        }
+        }*/
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAppointment(string id, AppointmentDTO appointmentDTO)
@@ -123,6 +124,35 @@ namespace AppointmentAPI.Controllers
             }
         }
 
+
+        [HttpGet("GetAllRecurringAppointments")]
+        public async Task<ActionResult<IEnumerable<RecurringAppointmentDto>>> GetAllRecurringAppointments()
+        {
+            var appointments = await _service.GetAllRecurringAppointments();
+
+            var appointmentDto = new List<RecurringAppointmentDto>();   
+
+            foreach (var appointment in appointments)
+            {
+                var dto = new RecurringAppointmentDto
+                {
+                    ClientName = appointment.ClientName,
+                    Service = appointment.Service,
+                    StartDate= appointment.RecurringAppointment.StartDate,
+                    EndDate=appointment.RecurringAppointment.EndDate,   
+                    RecurrenceType=appointment.RecurringAppointment.RecurrenceType,
+                    RecurrenceInterval= appointment.RecurringAppointment.RecurrenceInterval,
+                };
+
+                appointmentDto.Add(dto);
+            }
+
+            return appointmentDto;
+
+
+        }
+
+
         [HttpPost("recurring")]
         public async Task<ActionResult<IEnumerable<Appointment>>> CreateRecurringAppointment(RecurringAppointmentDto dto)
         {
@@ -139,6 +169,7 @@ namespace AppointmentAPI.Controllers
             try
             {
                 var appointments = await _service.GetUpcomingRecurringAppointmentsAsync(id, count);
+
                 return Ok(appointments);
             }
             catch (Exception ex)

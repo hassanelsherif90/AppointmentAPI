@@ -2,7 +2,7 @@
 
 namespace AppointmentAPI.DTO
 {
-    public class RecurringAppointmentDto
+    public class RecurringAppointmentDto 
     {
         public string ClientName { get; set; }
         public string Service { get; set; }

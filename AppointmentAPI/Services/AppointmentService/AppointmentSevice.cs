@@ -3,6 +3,7 @@ using AppointmentAPI.Model;
 using AppointmentAPI.Repository.AppointmentRepo;
 using AppointmentAPI.Repository.AppointmentRepository;
 using AppointmentAPI.Repository.RecurringAppointmentRepo;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace AppointmentAPI.Services.AppointmentService
 {
@@ -24,6 +25,10 @@ namespace AppointmentAPI.Services.AppointmentService
             return await _repository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Appointment>> GetAllRecurringAppointments()
+        {
+            return await _repository.AllRecurringAppointment();
+        }
         public async Task<Appointment> GetAppointmentById(string id)
         {
             var appointment = await _repository.GetByIdAsync(id);
@@ -77,10 +82,10 @@ namespace AppointmentAPI.Services.AppointmentService
                     workingHours.Add(dt);
                 }
             }
-
             return workingHours;
         }
 
+        //Create duplicate appointments after the same start date
         public async Task<List<Appointment>> CreateRecurringAppointmentsAsync(RecurringAppointmentDto dto)
         {
             var recurringAppointment = new RecurringAppointment
@@ -95,7 +100,9 @@ namespace AppointmentAPI.Services.AppointmentService
             await _recurringAppointmentRepository.AddAsync(recurringAppointment);
 
             var appointments = new List<Appointment>();
+
             var currentDate = dto.StartDate;
+
             var occurrenceCount = 0;
 
             while ((dto.EndDate == null || currentDate <= dto.EndDate) &&
@@ -132,6 +139,7 @@ namespace AppointmentAPI.Services.AppointmentService
             while (appointments.Count < count && (recurringAppointment.EndDate == null || appointments.Last().DateTime <= recurringAppointment.EndDate))
             {
                 var lastAppointment = appointments.Last();
+
                 var nextAppointment = new Appointment
                 {
                     ClientName = lastAppointment.ClientName,
@@ -192,5 +200,7 @@ namespace AppointmentAPI.Services.AppointmentService
                 _ => current.AddYears(interval)
             };
         }
+
+      
     }
 }

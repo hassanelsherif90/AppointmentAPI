@@ -6,6 +6,7 @@ namespace AppointmentAPI.Services.AppointmentService
     public interface IAppointmentService
     {
         Task<List<Appointment>> GetAllAppointments();
+        Task<IEnumerable<Appointment>> GetAllRecurringAppointments();
 
         Task<Appointment> GetAppointmentById(string id);
         Task<Appointment> CreateAppointment(Appointment appointment);
